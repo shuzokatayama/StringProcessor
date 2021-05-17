@@ -40,7 +40,7 @@ TASK 1. Count the number of characters, words, and lines in one or more files.
 TASK 2. Find all occurences of a given string in one or more files.
 - For this task, we will aim to find all the occurences of a given string in some text 
   by optimising the search processes using multithreading. To create a benchmark for 
-  this task, I will compare our multithreading solution to a baseline implementation 
+  this task, we will compare our multithreading solution to a baseline implementation 
   which will simply read every string in sequence, and to the grep command. 
 
   * WORKING implementation for PROOF OF CONCEPT
@@ -54,6 +54,8 @@ COMPILING and RUNNING:
 to run this program please compile and execute Tester.java. The results will be 
 displayed on the command line. 
 
+
+TASK 4. Spell Check: check every word 
 
 Test cases:
 1. Fitnessgram Pacer Test: small case

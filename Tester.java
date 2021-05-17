@@ -8,17 +8,21 @@ public class Tester{
         final File[] testCases = getFilesFromFolder(folder);
 
         // Test 1
+        /* SCRAPPED
         try{
             task1(testCases);
         } catch(IOException e){}
-        System.out.println();
+        System.out.println(); */
 
         // Test 2
         try{
             task2(testCases);
         } catch(IOException e) {}
-        
-        
+
+         // Test 3
+         try{
+            task3(testCases);
+        } catch(IOException e) {}
     }
 
     // TESTS 
@@ -35,7 +39,7 @@ public class Tester{
 
             System.out.println("TASK 1, Test case: "+file.getName());
             System.out.printf("|-----------|------------|------------------|---------|\n" +
-            "|    size   |    type    |   improvement    | passed? |\n" +
+            "|   count   |    type    |   improvement    | passed? |\n" +
             "|-----------|------------|------------------|---------|\n");
             
             // Print results for all three tasks
@@ -59,7 +63,7 @@ public class Tester{
     // TESTER for TASK 2: Search for a String
     public static void task2(File[] testCases) throws IOException{
         System.out.println("TASK 2: Search for a String");
-        String[] tests = {"test", "multithreading", "bee", "McQueen"};
+        String[] tests = {"test", "multithreading", "bee", "McQueen", "the"};
 
         int c = 0;
         for(File file : testCases){
@@ -69,10 +73,12 @@ public class Tester{
 
             System.out.println("TASK 2, Test case: "+file.getName());
             System.out.printf("|-----------|---------------|---------------------|---------|\n" +
-            "|   found   |     string    |     improvement     | passed? |\n" +
+            "|   count   |     string    |     improvement     | passed? |\n" +
             "|-----------|---------------|---------------------|---------|\n");
 
-            double improvement =  baselineResults[1] / multithreadedResults[1];
+            double t1 = (double) baselineResults[1];
+            double t2 = (double) multithreadedResults[1];
+            double improvement =  t1/t2;  
             
             boolean passed = true;
             if(baselineResults[0] != multithreadedResults[0]){
@@ -83,6 +89,38 @@ public class Tester{
             System.out.printf("|-----------|---------------|---------------------|---------|\n");
             System.out.println();
             c++;
+        }
+    }
+
+    // TESTER for TASK 3: Find distinct words in files
+    public static void task3(File[] testCases) throws IOException{
+        System.out.println("TASK 3: Count the Distinct Words");
+
+        for(File file : testCases){
+            DistinctSearch distinctSearch = new DistinctSearch(file);
+            int baselineResults[] = distinctSearch.baselineCounter();
+            int[] multithreadedResults = distinctSearch.multithreadedCounter();
+        
+            System.out.println("TASK 3, Test case: "+file.getName());
+            System.out.printf("|-----------|---------------------|---------|\n" +
+            "|   found   |     improvement     | passed? |\n" +
+            "|-----------|---------------------|---------|\n");
+
+            double t1 = (double) baselineResults[1];
+            double t2 = (double) multithreadedResults[1];
+            double improvement =  t1/t2;  
+
+            System.out.println(t1+ " "+t2);
+
+            boolean passed = true;
+            if(baselineResults[0] != multithreadedResults[0]){
+                passed = false;
+                System.out.println(baselineResults[0] + " "+multithreadedResults[0]);
+            }
+
+            System.out.printf("|   %7d |        %12f |   %5s |\n", baselineResults[0],  improvement, passed);
+            System.out.printf("|-----------|---------------------|---------|\n");
+            System.out.println();
         }
     }
 

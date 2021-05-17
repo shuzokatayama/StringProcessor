@@ -68,6 +68,7 @@ public class WordCounter{
 
         List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
         String[] fileArray = lines.toArray(new String[lines.size()]);
+        int[] sharedCounter = new int[cores];
 
         int chunkSize = (fileArray.length / cores);
         int lowIndex = 0;
@@ -81,14 +82,19 @@ public class WordCounter{
         for(int i=0; i<3; i++){
             double start = System.nanoTime();
             int total = 0;
+            
+            for(int k = 0; k<sharedCounter.length; k++){
+                sharedCounter[k]=0;
+            }
+            
             for(int j=0; j<(cores); j++){
-                Thread t = new Thread(new WordCounterThread(fileArray, lowIndex, highIndex, i, total));
+                Thread t = new Thread(new WordCounterThread(j, fileArray, lowIndex, highIndex, i, sharedCounter));
                 if(j==(cores-1)){   
-                    t = new Thread(new WordCounterThread(fileArray, lowIndex, (fileArray.length-1), i, total));
+                    t = new Thread(new WordCounterThread(j, fileArray, lowIndex, (fileArray.length-1), i, sharedCounter));
                 }
                 threads[j] = t;
                 lowIndex = highIndex+1;
-                highIndex = highIndex+chunkSize;
+                highIndex = lowIndex+chunkSize;
             }
 
             for(Thread t : threads){
@@ -100,6 +106,11 @@ public class WordCounter{
             }
                 catch (InterruptedException e) {}
             }
+
+            for(int k = 0; k<sharedCounter.length; k++){
+                total = total+sharedCounter[k];
+            }
+            System.out.println(total);
 
             double stop = System.nanoTime();
             double timeElapsed = (double) stop - start;

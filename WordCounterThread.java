@@ -2,13 +2,15 @@ import java.awt.*;
 
 public class WordCounterThread implements Runnable{
 
+    int id;
     String[] fileArray;
     int rangeLow;
     int rangeHigh;
     int type;
-    int total;
+    int[] total;
 
-    public WordCounterThread(String[] f, int l, int h, int t, int to){
+    public WordCounterThread(int i, String[] f, int l, int h, int t, int[] to){
+        id = i;
         fileArray = f;
         rangeLow = l;
         rangeHigh = h;
@@ -33,9 +35,14 @@ public class WordCounterThread implements Runnable{
 
             case 2:
                 int lines = 0;
+                for(int i=rangeLow; i<=rangeHigh; i++){
+                    if(fileArray[i].equals("\n")){
+                        lines++;
+                    }
+                }
                 result = lines;
                 break;            
         }
-        total = total+result;
+        total[id] = total[id]+result;
     }
 }
