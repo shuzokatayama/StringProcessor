@@ -28,8 +28,8 @@ public class DistinctSearch{
      * track of the unique words
      */
 
-    public int[] multithreadedCounter() throws IOException{
-        int[] results = new int[2];
+    public double[] multithreadedCounter() throws IOException{
+        double[] results = new double[2];
 
         double start = System.nanoTime();
 
@@ -40,7 +40,7 @@ public class DistinctSearch{
 
         List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
         String[] fileArray = lines.toArray(new String[lines.size()]);
-
+        
         int cores = Runtime.getRuntime().availableProcessors();
         Thread[] threads = new Thread[cores];
 
@@ -73,11 +73,6 @@ public class DistinctSearch{
         Object[] totals = uniqueStrings.toArray();
         int total = totals.length;
 
-        
-      /*  for(int i=0; i<totals.length; i++){
-            System.out.println(totals[i]);
-        } */
-
         double stop = System.nanoTime();
         double timeElapsed = (double) stop - start;
 
@@ -93,8 +88,8 @@ public class DistinctSearch{
      * Brute force method of counting the unique strings. Loop through the 
      * file and add distinct words into a List, then count the list
      */
-    public int[] baselineCounter() throws IOException{
-        int[] results = new int[2];
+    public double[] baselineCounter() throws IOException{
+        double[] results = new double[2];
 
         double start = System.nanoTime();
 
@@ -141,7 +136,7 @@ public class DistinctSearch{
 
 
         results[0] = distinctWordList.size();
-        results[1] = (int) timeElapsed;
+        results[1] = timeElapsed;
 
         return results;
     }

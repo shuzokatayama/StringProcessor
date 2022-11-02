@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- * FileSearch.java
+ * FileSearch.java (TASK 2: Search for a String)
  * Class that returns the following data in an array:
  * int results[], where
  * 
@@ -26,10 +26,14 @@ public class FileSearch{
 
     /**
      * Multithreaded approach:
+     * Convert the file into a large array of lines, and then assign each 
+     * thread a chunk of the array. Within the thread, attempt to find the 
+     * target string within each line. Add the totals to a shared results
+     * array, and then sum the results. 
      */
 
-    public int[] multithreadedCounter() throws IOException{
-        int[] results = new int[2];
+    public double[] multithreadedCounter() throws IOException{
+        double[] results = new double[2];
 
         double start = System.nanoTime();
 
@@ -79,7 +83,7 @@ public class FileSearch{
         double timeElapsed = (double) stop - start;
 
         results[0] = total;
-        results[1] = (int) timeElapsed;
+        results[1] = timeElapsed;
 
         return results;
     }
@@ -91,8 +95,8 @@ public class FileSearch{
      * BufferedReader to use a rudimentary while loop to read through the 
      * file line by line. 
      */
-    public int[] baselineCounter() throws IOException{
-        int[] results = new int[2];
+    public double[] baselineCounter() throws IOException{
+        double[] results = new double[2];
 
         int result = 0;
         double start = System.nanoTime();
@@ -105,6 +109,7 @@ public class FileSearch{
         try{
             while((line = reader.readLine())!=null){
                 String[] list = {};
+                // Remove unecessary characters
                 if(line!=null){
                     list = line.replaceAll("[^a-zA-Z ]", "").split("\\s+");
                 }
@@ -123,7 +128,7 @@ public class FileSearch{
         double timeElapsed = (double) stop - start;
 
         results[0] = result;
-        results[1] = (int) timeElapsed;
+        results[1] = timeElapsed;
 
         return results;
     }

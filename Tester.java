@@ -1,14 +1,24 @@
 import java.io.*;
 import java.util.Arrays;
 
+import javax.management.monitor.CounterMonitorMBean;
+
 public class Tester{
+
+    /**
+     * Tester.java
+     * This is where main is, and the program to run to test all the tasks
+     * main contains instructions to execute each task. Each task method 
+     * calls and runs their respective tasks, by calling the baseline implementation
+     * and the multithreaded implementation, then prints the results.
+     */
 
     public static void main(String args[]){
         File folder = new File("D:\\Projects\\School\\COSC-273\\stringProcessor\\tests");
         final File[] testCases = getFilesFromFolder(folder);
 
         // Test 1
-        /* SCRAPPED
+        /*
         try{
             task1(testCases);
         } catch(IOException e){}
@@ -20,8 +30,13 @@ public class Tester{
         } catch(IOException e) {}
 
          // Test 3
-         try{
+        try{
             task3(testCases);
+        } catch(IOException e) {}
+    
+        // Test 4
+        try{
+            task4(testCases);
         } catch(IOException e) {}
     }
 
@@ -34,8 +49,8 @@ public class Tester{
 
         for(File file : testCases){
             WordCounter wCounter = new WordCounter(file);
-            int[][] baselineResults = wCounter.baselineCounter();
-            int[][] multithreadedResults = wCounter.multithreadedCounter();
+            double[][] baselineResults = wCounter.baselineCounter();
+            double[][] multithreadedResults = wCounter.multithreadedCounter();
 
             System.out.println("TASK 1, Test case: "+file.getName());
             System.out.printf("|-----------|------------|------------------|---------|\n" +
@@ -50,9 +65,10 @@ public class Tester{
                     passed = false;
                 }
 
-                double improvement = (double) (baselineResults[i][1] / multithreadedResults[i][1]);
+                double improvement = (double) (multithreadedResults[i][1] / baselineResults[i][1]);
+                int count = (int) baselineResults[i][0];
 
-                System.out.printf("|   %7d | %11s|         %8f |   %5s |\n", baselineResults[i][0], types[i], improvement/1_000, passed);
+                System.out.printf("|   %7d | %11s|         %8f |   %5s |\n", count, types[i], improvement/1_000, passed);
             }
 
             System.out.printf("|-----------|------------|------------------|---------|\n");
@@ -63,13 +79,14 @@ public class Tester{
     // TESTER for TASK 2: Search for a String
     public static void task2(File[] testCases) throws IOException{
         System.out.println("TASK 2: Search for a String");
-        String[] tests = {"test", "multithreading", "bee", "McQueen", "the"};
+        //String[] tests = {"test", "multithreading", "bee", "McQueen", "the", "madcap"};
+        String[] tests = {"the", "the", "the", "the", "the", "the"};
 
         int c = 0;
         for(File file : testCases){
             FileSearch searcher = new FileSearch(file, tests[c]);
-            int[] baselineResults = searcher.baselineCounter();
-            int[] multithreadedResults = searcher.multithreadedCounter();
+            double[] baselineResults = searcher.baselineCounter();
+            double[] multithreadedResults = searcher.multithreadedCounter();
 
             System.out.println("TASK 2, Test case: "+file.getName());
             System.out.printf("|-----------|---------------|---------------------|---------|\n" +
@@ -85,7 +102,9 @@ public class Tester{
                 passed = false;
             }
 
-            System.out.printf("|   %7d | %14s|        %12f |   %5s |\n", baselineResults[0], tests[c], improvement/1_000, passed);
+            int count = (int) baselineResults[0];
+
+            System.out.printf("|   %7d | %14s|        %12f |   %5s |\n", count, tests[c], improvement/1_000, passed);
             System.out.printf("|-----------|---------------|---------------------|---------|\n");
             System.out.println();
             c++;
@@ -98,8 +117,8 @@ public class Tester{
 
         for(File file : testCases){
             DistinctSearch distinctSearch = new DistinctSearch(file);
-            int baselineResults[] = distinctSearch.baselineCounter();
-            int[] multithreadedResults = distinctSearch.multithreadedCounter();
+            double[] baselineResults = distinctSearch.baselineCounter();
+            double[] multithreadedResults = distinctSearch.multithreadedCounter();
         
             System.out.println("TASK 3, Test case: "+file.getName());
             System.out.printf("|-----------|---------------------|---------|\n" +
@@ -110,15 +129,51 @@ public class Tester{
             double t2 = (double) multithreadedResults[1];
             double improvement =  t1/t2;  
 
-            System.out.println(t1+ " "+t2);
+            // System.out.println(t1+ " "+t2);
 
             boolean passed = true;
             if(baselineResults[0] != multithreadedResults[0]){
                 passed = false;
-                System.out.println(baselineResults[0] + " "+multithreadedResults[0]);
+                // System.out.println(baselineResults[0] + " "+multithreadedResults[0]);
             }
 
-            System.out.printf("|   %7d |        %12f |   %5s |\n", baselineResults[0],  improvement, passed);
+            int count = (int) baselineResults[0];
+
+            System.out.printf("|   %7d |        %12f |   %5s |\n", count,  improvement, passed);
+            System.out.printf("|-----------|---------------------|---------|\n");
+            System.out.println();
+        }
+    }
+
+    // TESTER for TASK 4: Spell check
+    public static void task4(File[] testCases) throws IOException{
+        System.out.println("TASK 4: Spell Check");
+
+        for(File file : testCases){
+            SpellCheck spellCheck = new SpellCheck(file);
+            double[] baselineResults = spellCheck.baselineCounter();
+            double[] multithreadedResults = spellCheck.multithreadedCounter();
+        
+            System.out.println("TASK 4, Spell Check: "+file.getName());
+            System.out.printf("|-----------|---------------------|---------|\n" +
+            "|   found   |     improvement     | passed? |\n" +
+            "|-----------|---------------------|---------|\n");
+
+            double t1 = (double) baselineResults[1];
+            double t2 = (double) multithreadedResults[1];
+            double improvement =  t1/t2;  
+
+            // System.out.println(t1+ " "+t2);
+
+            boolean passed = true;
+            if(baselineResults[0] != multithreadedResults[0]){
+                passed = false;
+                // System.out.println(baselineResults[0] + " "+multithreadedResults[0]);
+            }
+
+            int count = (int) baselineResults[0];
+
+            System.out.printf("|   %7d |        %12f |   %5s |\n", count,  improvement, passed);
             System.out.printf("|-----------|---------------------|---------|\n");
             System.out.println();
         }

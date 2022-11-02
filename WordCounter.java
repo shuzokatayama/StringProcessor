@@ -28,8 +28,8 @@ public class WordCounter{
      * BufferedReader to use a rudimentary while loop to read through the 
      * file line by line. 
      */
-    public int[][] baselineCounter(){
-        int[][] results = new int[3][2];
+    public double[][] baselineCounter(){
+        double[][] results = new double[3][2];
 
         // Go through all 3 tasks using the baseline implementation
         for(int i=0; i<3; i++){
@@ -44,7 +44,7 @@ public class WordCounter{
             double timeElapsed = (double) stop - start;
 
             results[i][0] = result;
-            results[i][1] = (int) timeElapsed;
+            results[i][1] = timeElapsed;
             // 0: Result from each countType result
             // 1: time elapsed
             
@@ -57,8 +57,8 @@ public class WordCounter{
      * Use the readAllLines method to convert the entire file to a String[], and 
      * then use multithreading to parse through the document in parallel
      */
-    public int[][] multithreadedCounter() throws IOException {
-        int[][] results = new int[3][2];
+    public double[][] multithreadedCounter() throws IOException {
+        double[][] results = new double[3][2];
         int cores = Runtime.getRuntime().availableProcessors();
         Thread[] threads = new Thread[cores];
 
@@ -116,7 +116,7 @@ public class WordCounter{
             double timeElapsed = (double) stop - start;
 
             results[i][0] = total;
-            results[i][1] = (int) timeElapsed;
+            results[i][1] = timeElapsed;
         }
 
         return results;
